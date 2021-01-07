@@ -51,34 +51,35 @@ const Checkout = () => {
   const [subscribing, setSubscribing] = useState(false);
 
   const subscribe = async (paymentMethodId) => {
-    const priceId = router.query.pId;
-    const response = await fetch('http://localhost:8080/api/subscription', {
+    const planId = router.query.pId;
+    const response = await fetch('http://localhost:8080/api/subscriptions', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        userId: 2,
         email: email,
         paymentMethodId: paymentMethodId,
-        priceId: priceId,
+        planId: planId,
       }),
     });
     const subscription = await response.json();
-    if (
-      subscription.latest_invoice.payment_intent.status ===
-      'requires_payment_method'
-    ) {
-      // Using localStorage to store the state of the retry here
-      // (feel free to replace with what you prefer)
-      // Store the latest invoice ID and status
-      localStorage.setItem('latestInvoiceId', subscription.latest_invoice.id);
-      localStorage.setItem(
-        'latestInvoicePaymentIntentStatus',
-        subscription.latest_invoice.payment_intent.status
-      );
-      throw new Error('Your card was declined.');
-    }
-    console.log(res);
+    // if (
+    //   subscription.latest_invoice?.payment_intent?.status ===
+    //   'requires_payment_method'
+    // ) {
+    //   // Using localStorage to store the state of the retry here
+    //   // (feel free to replace with what you prefer)
+    //   // Store the latest invoice ID and status
+    //   localStorage.setItem('latestInvoiceId', subscription.latest_invoice.id);
+    //   localStorage.setItem(
+    //     'latestInvoicePaymentIntentStatus',
+    //     subscription.latest_invoice.payment_intent.status
+    //   );
+    //   throw new Error('Your card was declined.');
+    // }
+    console.log(subscription);
   };
 
   const handleSubmit = async (event) => {
